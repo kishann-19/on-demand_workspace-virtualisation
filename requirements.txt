@@ -1,0 +1,5 @@
+fastapi==0.143.0
+uvicorn[standard]==0.54.0
+docker==7.2.0
+boto3==1.43.112
+python-dotenv==1.2.4

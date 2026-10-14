@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#153e35">
+  <meta name="description" content="Your personal cloud lab. Launch isolated Linux, Python, and web development workspaces.">
+  <title>CloudLab — A little space for big ideas</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/vendor/xterm.css">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/vendor/xterm.js" defer></script>
+  <script src="/static/vendor/addon-fit.js" defer></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div id="loading" class="loading">☁ &nbsp; Opening CloudLab…</div>
+  <section id="auth-screen" class="auth-screen hidden">
+    <div class="auth-story">
+      <a class="brand" href="/"><span class="brand-icon">☁</span> CloudLab<span class="brand-dot">.</span></a>
+      <div class="auth-pitch"><span class="eyebrow light">YOUR IDEAS. YOUR ENVIRONMENT.</span><h1>A little space.<br>For big ideas.</h1><p>A fresh Linux lab. Your next Python experiment. A website waiting to happen. Launch your own workspace and make it yours.</p>
+        <div class="stack-art" aria-hidden="true"><div class="stack-card back">&lt;/&gt; &nbsp; Web development</div><div class="stack-card middle">Py &nbsp; Python lab <i>●</i></div><div class="stack-card front">&gt;_ &nbsp; Linux basics <i>●</i><small>YOUR SPACE TO EXPLORE</small></div></div>
+      </div><span class="auth-foot">Isolated environments. Persistent ideas.</span>
+    </div>
+    <div class="auth-form-wrap"><span class="eyebrow">LET’S GET STARTED</span><h2 id="auth-title">Welcome back.</h2><p id="auth-subtitle" class="muted">Your workspace is right where you left it.</p>
+      <form id="auth-form">
+        <label id="name-label" class="hidden">Your name<input name="name" autocomplete="name" maxlength="60" placeholder="Alex Morgan"></label>
+        <label>Email address<input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+        <label>Password<input name="password" type="password" required autocomplete="current-password" maxlength="128" placeholder="At least 10 characters"></label>
+        <p id="auth-error" class="error" role="alert"></p><button id="auth-submit" class="button primary wide" type="submit">Sign in <span>↗</span></button>
+      </form><p id="auth-switch" class="auth-switch">New here? <button class="text-button" id="toggle-auth">Create an account</button></p>
+      <div class="auth-note"><span>◇</span><p>Everything you need to learn and build.<br>No local development setup required.</p></div>
+    </div>
+  </section>
+  <div id="app-shell" class="app-shell hidden">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard"><span class="brand-icon">☁</span> CloudLab<span class="brand-dot">.</span></a>
+      <div class="sidebar-caption">YOUR CONTROL ROOM</div>
+      <nav aria-label="Main navigation">
+        <button data-nav="dashboard" class="nav-item active"><span>▦</span> Overview</button>
+        <button data-nav="labs" class="nav-item"><span>⌘</span> Virtual labs <b id="lab-count">0</b></button>
+        <button data-nav="workspaces" class="nav-item"><span>▱</span> Workspaces <b id="workspace-count">0</b></button>
+        <button data-nav="templates" class="nav-item"><span>◈</span> Template library</button>
+        <button data-nav="admin" id="admin-nav" class="nav-item hidden"><span>◎</span> Administration</button>
+      </nav>
+      <div class="sidebar-bottom"><div class="engine-card"><span id="engine-dot" class="status-dot"></span><strong id="engine-title">Checking engine</strong><p id="engine-description">Connecting to your environment</p><div class="engine-line"></div><small id="storage-label">Persistent workspace storage</small></div>
+        <button data-nav="guide" class="nav-item guide-link"><span>?</span> Getting started <span>↗</span></button>
+        <div class="profile"><span id="avatar" class="avatar">A</span><div><strong id="profile-name"></strong><small id="profile-role"></small></div><button id="logout" class="icon-button" title="Sign out" aria-label="Sign out">↪</button></div>
+      </div>
+    </aside>
+    <div class="main-wrap"><header class="topbar"><span>Personal cloud <span class="slash">/</span> <strong id="breadcrumb">Overview</strong></span><span class="topbar-right"><span class="tiny-dot"></span> A space to make things happen <span class="version">v1.0</span></span></header>
+      <main id="main-content" tabindex="-1"></main><footer class="main-footer"><span>CloudLab · Learn. Build. Repeat.</span><span>Your files stay with you.</span></footer>
+    </div>
+  </div>
+  <dialog id="create-dialog"><form id="create-form"><div class="dialog-heading"><span class="eyebrow">A FRESH START</span><button type="button" class="icon-button" data-close aria-label="Close">×</button></div><h2>Make room for an idea.</h2><p class="muted">Choose a template. We’ll take care of the environment.</p>
+    <label>Workspace name<input id="create-name" name="name" required maxlength="60" pattern="[\w .()\-]+" placeholder="My Python experiment"></label>
+    <label>What are you working on?<select name="mode"><option value="lab">Virtual lab — guided practice</option><option value="workspace">Workspace — your own project</option></select></label>
+    <label>Environment template<select name="template" id="create-template"><option value="linux">Linux Basics · 0.5 CPU · 256 MB</option><option value="python">Python Lab · 1 CPU · 512 MB</option><option value="web">Web Development · 1 CPU · 512 MB</option></select></label>
+    <div class="info-box">◇ &nbsp; Files are saved in persistent storage. You can stop and resume any time.</div><p id="create-error" class="error" role="alert"></p><button type="submit" class="button primary wide">Launch workspace <span>↗</span></button>
+  </form></dialog>
+  <dialog id="backups-dialog"><div class="dialog-heading"><span class="eyebrow">A SAFE PLACE FOR YOUR WORK</span><button class="icon-button" data-close aria-label="Close">×</button></div><h2>Workspace backups</h2><p id="backup-subtitle" class="muted"></p><div id="backup-list"></div><button id="backup-create" class="button primary wide">Create backup</button></dialog>
+  <section id="editor-screen" class="editor-screen hidden" aria-label="Workspace editor">
+    <header class="editor-topbar"><button id="close-editor" class="button subtle">← Overview</button><span class="editor-title"><span class="status-dot"></span><strong id="editor-name"></strong><small id="editor-template"></small></span><span id="editor-metrics" class="editor-metrics"></span><button id="preview-button" class="button subtle hidden">◉ Preview</button><button id="run-button" class="button subtle">▷ Run</button><button id="save-button" class="button primary">Save file</button></header>
+    <div class="editor-layout"><aside class="file-sidebar"><div class="file-heading">EXPLORER<button id="new-file" class="icon-button" title="New file" aria-label="New file">+</button><button id="refresh-files" class="icon-button" title="Refresh files" aria-label="Refresh files">↻</button></div><div id="file-tree"></div><div id="lab-instructions" class="lab-instructions"></div><div class="editor-tip">Files in <code>/workspace</code> persist when you stop your environment.</div></aside>
+      <div class="editor-work"><div class="file-tab"><span id="current-file">Select a file</span><span id="save-status">Saved</span><button id="delete-file" class="text-button">Delete file</button></div><textarea id="code-editor" aria-label="Code editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+        <div class="terminal-heading"><span>TERMINAL <span id="terminal-status" class="terminal-status">Connecting…</span></span><button id="reconnect-terminal" class="text-button">Reconnect</button></div><div id="terminal"></div>
+      </div>
+    </div>
+  </section>
+  <dialog id="preview-dialog" class="preview-dialog"><div class="dialog-heading"><strong>Browser preview</strong><button class="icon-button" data-close aria-label="Close">×</button></div><p class="muted">Saved HTML, CSS, and JavaScript, in an isolated browser frame.</p><iframe id="preview-frame" title="Workspace website preview" sandbox="allow-scripts"></iframe></dialog>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+</body>
+</html>

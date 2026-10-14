@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    image: cloudlab-api:local
+    restart: unless-stopped
+    init: true
+    env_file: .env
+    environment:
+      DATA_DIR: /app/data
+      DOCKER_HOST: unix:///var/run/docker.sock
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - cloudlab-data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+volumes:
+  cloudlab-data:
